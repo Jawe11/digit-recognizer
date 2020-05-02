@@ -61,11 +61,18 @@ vorhersage = model.predict(test_data)
 
 
 #code zum darstellen zufälliger testbilder
+fig=plt.figure(figsize=(8, 8))
+columns = 4
+rows = 4
 
-for i in range(10):
+for i in range(1,17):
     index_testbild = randint(0, 28000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
-    vorhersage_testbild = np.argmax(vorhersage[index_testbild])
+    vorhersage_testbild = np.argmax(vorhersage[index_testbild]) #Neuron auf Exitlayer mit höchster Wahrscheinlichkeit auswählen
+    fig.add_subplot(rows, columns, i)
     plt.imshow(test_data[index_testbild], cmap="Greys") #testbild in SW darstellen
     plt.title("Ermittelte Zahl: " + str(vorhersage_testbild))
-    plt.show()
+plt.subplots_adjust(hspace=0.8) #Abstand der Plots (Höhe)
+plt.show()
+
+
 
