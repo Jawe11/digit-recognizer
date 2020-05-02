@@ -39,6 +39,8 @@ model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=
 epochs = 2 #Anzahl an Trainings Iterationen
 history = model.fit(train_data, train_label, epochs = epochs)
 
+
+
 #Auswertung des Trainingsfortschritts
 acc = history.history['accuracy']
 loss=history.history['loss']
@@ -60,6 +62,9 @@ plt.show()
 vorhersage = model.predict(test_data)
 
 
+
+
+
 #code zum darstellen zufälliger testbilder
 fig=plt.figure(figsize=(8, 8))
 columns = 4
@@ -67,11 +72,14 @@ rows = 4
 
 for i in range(1,17):
     index_testbild = randint(0, 28000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
+    wahrscheinlichkeit_testbild = np.amax(vorhersage[index_testbild]) #Höchste Wahrscheinlichkeit auf ExitLayer
+    wahrscheinlichkeit_testbild = wahrscheinlichkeit_testbild*100 #Zu Prozent wandeln
     vorhersage_testbild = np.argmax(vorhersage[index_testbild]) #Neuron auf Exitlayer mit höchster Wahrscheinlichkeit auswählen
-    fig.add_subplot(rows, columns, i)
+    fig.add_subplot(rows, columns, i) 
     plt.imshow(test_data[index_testbild], cmap="Greys") #testbild in SW darstellen
     plt.title("Ermittelte Zahl: " + str(vorhersage_testbild))
-plt.subplots_adjust(hspace=0.8) #Abstand der Plots (Höhe)
+    plt.xlabel(str(wahrscheinlichkeit_testbild.round(2))+" % ")#Anzeige derWahrscheinlichkeit der Vorhersage auf 2 Nachkommastellen gerundet
+plt.subplots_adjust(hspace=1.8, wspace = 1.8) #Abstand der Plots
 plt.show()
 
 
