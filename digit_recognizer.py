@@ -36,17 +36,31 @@ model = tf.keras.models.Sequential([
 model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
 #training keras model
-model.fit(train_data, train_label, epochs=5)
+epochs = 2 #Anzahl an Trainings Iterationen
+history = model.fit(train_data, train_label, epochs = epochs)
+
+#Auswertung des Trainingsfortschritts
+acc = history.history['accuracy']
+loss=history.history['loss']
+epochs_range = range(epochs)
+
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2,1)
+plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training Accuracy')
+plt.subplot(1, 2,2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.legend(loc='upper right')
+plt.title('Training Loss')
+plt.show()
 
 
 #Bild vorhersagen
 vorhersage = model.predict(test_data)
 
 
-#code zum darstellen eines testbildes 
-#plt.imshow(test_data[index_testbild], cmap="Greys") #testbild in SW darstellen
-#plt.title("Ermittelte Zahl: " + str(vorhersage_testbild))
-#plt.show()
+#code zum darstellen zufälliger testbilder
 
 for i in range(10):
     index_testbild = randint(0, 28000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
