@@ -6,7 +6,6 @@ import numpy as np
 from random import randint
  
 
-index_testbild = randint(0, 28000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
 
 train = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/train.csv",sep=",") #Pfad zu CSV Files
 test = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/test.csv",sep=",")
@@ -43,11 +42,16 @@ model.fit(train_data, train_label, epochs=5)
 #Bild vorhersagen
 vorhersage = model.predict(test_data)
 
-print(np.argmax(vorhersage[index_testbild]))
-vorhersage_testbild = np.argmax(vorhersage[index_testbild])
 
 #code zum darstellen eines testbildes 
-plt.imshow(test_data[index_testbild], cmap="Greys") #testbild in SW darstellen
-plt.title("Ermittelte Zahl: " + str(vorhersage_testbild))
-plt.show()
+#plt.imshow(test_data[index_testbild], cmap="Greys") #testbild in SW darstellen
+#plt.title("Ermittelte Zahl: " + str(vorhersage_testbild))
+#plt.show()
+
+for i in range(10):
+    index_testbild = randint(0, 28000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
+    vorhersage_testbild = np.argmax(vorhersage[index_testbild])
+    plt.imshow(test_data[index_testbild], cmap="Greys") #testbild in SW darstellen
+    plt.title("Ermittelte Zahl: " + str(vorhersage_testbild))
+    plt.show()
 
