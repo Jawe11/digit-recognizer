@@ -7,23 +7,30 @@ from random import randint
  
 
 
-train = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/train.csv",sep=",") #Pfad zu CSV Files
-test = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/test.csv",sep=",")
+#train = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/train.csv",sep=",") #Pfad zu CSV Files
+#test = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/test.csv",sep=",")
 
-# print(train.head())
-# print(test.head())
+mnist = tf.keras.datasets.mnist
+(train_data, train_label), (test_data, test_label) = mnist.load_data()
 
-train_label = train["label"]
-train_data = (train.drop("label", axis = 1))
+#print(x_train.shape)
+#print(y_train.shape)
+
+
+#print(x_test.shape)
+#print(y_test.shape)
+
+#train_label = train["label"]
+#train_data = (train.drop("label", axis = 1))
 #print(train_data.shape) -> (42000, 784)
 
 train_data = train_data / 255.0 #conversion to floating point
-test_data = test / 255.0
+test_data = test_data / 255.0
 #print(test_data.shape) ->(28000, 784)
 
 #umformen aller Daten in 2D Matrix 28x28
-train_data = train_data.values.reshape(-1,28,28)
-test_data = test_data.values.reshape(-1,28,28)
+#train_data = train_data.values.reshape(-1,28,28)
+#test_data = test_data.values.reshape(-1,28,28)
 #print(train_data.shape) -> (42000, 28, 28)
 
 # Aufbau Keras Modell
