@@ -36,7 +36,7 @@ model = tf.keras.models.Sequential([
 model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
 #training keras model
-epochs = 2 #Anzahl an Trainings Iterationen
+epochs = 5 #Anzahl an Trainings Iterationen
 history = model.fit(train_data, train_label, epochs = epochs)
 
 
