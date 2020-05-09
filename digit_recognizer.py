@@ -43,25 +43,34 @@ model = tf.keras.models.Sequential([
 model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
 #training keras model
-epochs = 5 #Anzahl an Trainings Iterationen
-history = model.fit(train_data, train_label, epochs = epochs)
+epochs = 100 #Anzahl an Trainings Iterationen
+history = model.fit(train_data, train_label,validation_data=(test_data,test_label), epochs = epochs)
 
 
 
 #Auswertung des Trainingsfortschritts
 acc = history.history['accuracy']
 loss=history.history['loss']
+val_acc = history.history['val_accuracy']
+val_loss=history.history['val_loss']
+
+
 epochs_range = range(epochs)
+
+# list all data in history
+# print(history.history.keys()) -> Anzeigen aller verfügbaren history Datensätze
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2,1)
 plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.plot(epochs_range, val_acc, label='Validation Accuracy')
 plt.legend(loc='lower right')
-plt.title('Training Accuracy')
+plt.title('Training & Validation Accuracy')
 plt.subplot(1, 2,2)
 plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
-plt.title('Training Loss')
+plt.title('Training & Validation Loss')
 plt.show()
 
 
@@ -78,7 +87,7 @@ columns = 4
 rows = 4
 
 for i in range(1,17):
-    index_testbild = randint(0, 28000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
+    index_testbild = randint(0, 10000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
     wahrscheinlichkeit_testbild = np.amax(vorhersage[index_testbild]) #Höchste Wahrscheinlichkeit auf ExitLayer
     wahrscheinlichkeit_testbild = wahrscheinlichkeit_testbild*100 #Zu Prozent wandeln
     vorhersage_testbild = np.argmax(vorhersage[index_testbild]) #Neuron auf Exitlayer mit höchster Wahrscheinlichkeit auswählen
