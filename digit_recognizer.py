@@ -4,11 +4,7 @@ import pandas as pd         # Pandas zur Datenanalyse
 import matplotlib.pyplot as plt #Pyplot zur graphischen Darstellung
 import numpy as np
 from random import randint
- 
 
-
-#train = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/train.csv",sep=",") #Pfad zu CSV Files
-#test = pd.read_csv("C:/Users/janwe/Documents/GitHub/digit-recognizer/test.csv",sep=",")
 
 mnist = tf.keras.datasets.mnist
 (train_data, train_label), (test_data, test_label) = mnist.load_data()
@@ -16,34 +12,26 @@ mnist = tf.keras.datasets.mnist
 #print(x_train.shape)
 #print(y_train.shape)
 
-
 #print(x_test.shape)
 #print(y_test.shape)
 
-#train_label = train["label"]
-#train_data = (train.drop("label", axis = 1))
-#print(train_data.shape) -> (42000, 784)
-
 train_data = train_data / 255.0 #conversion to floating point
 test_data = test_data / 255.0
-#print(test_data.shape) ->(28000, 784)
 
-#umformen aller Daten in 2D Matrix 28x28
-#train_data = train_data.values.reshape(-1,28,28)
-#test_data = test_data.values.reshape(-1,28,28)
-#print(train_data.shape) -> (42000, 28, 28)
 
 # Aufbau Keras Modell
 model = tf.keras.models.Sequential([
   tf.keras.layers.Flatten(input_shape=(28,28)), #Flatten nötig da schon eindimensional?
   tf.keras.layers.Dense(128, activation="relu"),
+    tf.keras.layers.Dropout(0.25),
     tf.keras.layers.Dense(10, activation="softmax") #"softmax baked into last layer" google rät davon ab
 ])
 
 model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
+
 #training keras model
-epochs = 100 #Anzahl an Trainings Iterationen
+epochs = 30 #Anzahl an Trainings Iterationen
 history = model.fit(train_data, train_label,validation_data=(test_data,test_label), epochs = epochs)
 
 
