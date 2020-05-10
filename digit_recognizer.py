@@ -19,16 +19,29 @@ test_data = test_data / 255.0
 
 
 # Aufbau Keras Modell
-# 3 Layers Convolutional am besten, jedoch annähernd genausogut
+
+#filters is the number of desired feature maps.
+#kernel_size is the size of the convolution kernel. A single number 5 means a 5x5 convolution.
+#strides the new layer maps will have a size equal to the previous layer maps divided by strides. Leaving this blank results in strides=1.
+#padding is either 'same' or 'valid'. Leaving this blank results in padding='valid'. If padding is 'valid' then the size of the new layer maps is reduced by kernel_size-1. For example, if you perform a 5x5 convolution on a 28x28 image (map) with padding='valid', then the next layer has maps of size 24x24. If padding is 'same', then the size isn't reduced.
+#activation is applied during forward propagation. Leaving this blank results in no activation.
+
+# 3 Layers Convolutional am besten, jedoch 2 annähernd genausogut
 # 
 model = tf.keras.models.Sequential([
   
-  tf.keras.layers.Conv2D(32, kernel_size =5, input_shape= input_shape, activation='relu'), #erstes Conv2D mit 32 feature Maps
-  tf.keras.layers.MaxPool2D(),
+  tf.keras.layers.Conv2D(32, kernel_size =3, input_shape= input_shape, activation='relu'), #erstes Conv2D mit 32 feature Maps
+  tf.keras.layers.Conv2D(32, kernel_size =3, input_shape= input_shape, activation='relu'), #zwei 3x3 Conv2D statt 1x 5x5
+  tf.keras.layers.BatchNormalization(),# Normalisierung der Aktivierungsfunktion zwischen den mini batches
+  tf.keras.layers.Conv2D(64,kernel_size = 5, strides = 2, padding = "same", activation='relu'), #ersetzt MaxPool2D
+  tf.keras.layers.BatchNormalization(),
 	tf.keras.layers.Dropout(0.4),#ideal zwischen 0,2 und 0,4
 
-  tf.keras.layers.Conv2D(64,kernel_size = 5, activation='relu'), #zweites Conv2D mit 64 feature Maps 
-  tf.keras.layers.MaxPool2D(),
+  tf.keras.layers.Conv2D(64,kernel_size = 3, activation='relu'), #zweites Conv2D mit 64 feature Maps 
+  tf.keras.layers.Conv2D(64,kernel_size = 3, activation='relu'), #zwei 3x3 Conv2D statt 1x 5x5
+  tf.keras.layers.BatchNormalization(),
+  tf.keras.layers.Conv2D(64,kernel_size = 5, strides = 2, padding = "same", activation='relu'),
+  tf.keras.layers.BatchNormalization(),
 	tf.keras.layers.Dropout(0.4),
 
 	tf.keras.layers.Flatten(),
