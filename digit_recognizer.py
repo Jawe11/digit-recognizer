@@ -9,11 +9,10 @@ from random import randint
 mnist = tf.keras.datasets.mnist
 (train_data, train_label), (test_data, test_label) = mnist.load_data()
 
-#print(x_train.shape)
-#print(y_train.shape)
+train_data = train_data.reshape(train_data.shape[0], 28, 28, 1)
+test_data = test_data.reshape(test_data.shape[0], 28, 28, 1)
+input_shape = (28, 28, 1)
 
-#print(x_test.shape)
-#print(y_test.shape)
 
 train_data = train_data / 255.0 #conversion to floating point
 test_data = test_data / 255.0
@@ -21,17 +20,29 @@ test_data = test_data / 255.0
 
 # Aufbau Keras Modell
 model = tf.keras.models.Sequential([
-  tf.keras.layers.Flatten(input_shape=(28,28)), #Flatten nötig da schon eindimensional?
-  tf.keras.layers.Dense(128, activation="relu"),
-    tf.keras.layers.Dropout(0.25),
-    tf.keras.layers.Dense(10, activation="softmax") #"softmax baked into last layer" google rät davon ab
+  
+  tf.keras.layers.Conv2D(32,(3,3), input_shape= input_shape, activation='relu'),
+
+  tf.keras.layers.Conv2D(64,(5,5), input_shape= input_shape, activation='relu'),
+
+  tf.keras.layers.MaxPooling2D(pool_size = (2,2)),
+
+	tf.keras.layers.Dropout(0.25),
+
+	tf.keras.layers.Flatten(),
+
+	tf.keras.layers.Dense(128, activation='relu'),
+
+  tf.keras.layers.Dropout(0.5),
+
+	tf.keras.layers.Dense(10, activation='softmax')
 ])
 
 model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
 
 #training keras model
-epochs = 30 #Anzahl an Trainings Iterationen
+epochs = 20 #Anzahl an Trainings Iterationen
 history = model.fit(train_data, train_label,validation_data=(test_data,test_label), epochs = epochs)
 
 
