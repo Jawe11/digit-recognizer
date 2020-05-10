@@ -19,21 +19,22 @@ test_data = test_data / 255.0
 
 
 # Aufbau Keras Modell
+# 3 Layers Convolutional am besten, jedoch annähernd genausogut
+# 
 model = tf.keras.models.Sequential([
   
-  tf.keras.layers.Conv2D(32,(3,3), input_shape= input_shape, activation='relu'),
+  tf.keras.layers.Conv2D(32, kernel_size =5, input_shape= input_shape, activation='relu'), #erstes Conv2D mit 32 feature Maps
+  tf.keras.layers.MaxPool2D(),
+	tf.keras.layers.Dropout(0.4),#ideal zwischen 0,2 und 0,4
 
-  tf.keras.layers.Conv2D(64,(5,5), input_shape= input_shape, activation='relu'),
-
-  tf.keras.layers.MaxPooling2D(pool_size = (2,2)),
-
-	tf.keras.layers.Dropout(0.25),
+  tf.keras.layers.Conv2D(64,kernel_size = 5, activation='relu'), #zweites Conv2D mit 64 feature Maps 
+  tf.keras.layers.MaxPool2D(),
+	tf.keras.layers.Dropout(0.4),
 
 	tf.keras.layers.Flatten(),
 
-	tf.keras.layers.Dense(128, activation='relu'),
-
-  tf.keras.layers.Dropout(0.5),
+	tf.keras.layers.Dense(128, activation='relu'), #ab 128 Neuronen keine signifikante Verbesserung
+  tf.keras.layers.Dropout(0.4),
 
 	tf.keras.layers.Dense(10, activation='softmax')
 ])
@@ -84,6 +85,9 @@ vorhersage = model.predict(test_data)
 fig=plt.figure(figsize=(8, 8))
 columns = 4
 rows = 4
+
+train_data = train_data.reshape(train_data.shape[0], 28, 28)
+test_data = test_data.reshape(test_data.shape[0], 28, 28)
 
 for i in range(1,17):
     index_testbild = randint(0, 10000) #Zufällige Auswahl eines anzuzeigenden Testbildes aus test_data
